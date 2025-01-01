@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  dhcp_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dhcp_server
+    ports:
+      - "15797:15797"
+    networks:
+      - dhcp_net
+    environment:
+      - JAVA_OPTS=-Xmx512m # Optional: Adjust JVM memory
+
+  dhcp_client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dhcp_client
+    networks:
+      - dhcp_net
+    command: ["java", "-cp", "app.jar", "ClientGUI"] # Customize for your client class
+
+networks:
+  dhcp_net:
+    driver: bridge
